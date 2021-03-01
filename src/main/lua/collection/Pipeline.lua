@@ -3,9 +3,42 @@
 --- Created by fangjinuo.
 --- DateTime: 2021/2/26 18:18
 ---
+local Collects = require("collection.Collects")
+local Pipeline = { iterable = {} }
 
-local Pipeline = { tb = {} }
-
-function Pipeline:new(table)
-
+--- create a pipeline with an iterable
+--- @param iterable table
+--- @return  table
+function Pipeline:new(iterable)
+    iterable = iterable or {}
+    instance = {}
+    setmetatable(instance, self)
+    self.__index = self
+    instance.iterable = iterable
+    return instance
 end
+
+--- foreach
+--- @param consumePredicate function the consume predicate
+--- @param consumer function the consumer
+--- @param breakPredicate function the break predicate
+function Pipeline:forEach(consumePredicate, consumer, breakPredicate)
+    Collects.forEach(self.iterable, consumePredicate, consumer, breakPredicate)
+end
+
+--- do filter
+function Pipeline:filter(predicate)
+    local table = Collects.filter(self.iterable, predicate)
+    return Pipeline:new(table);
+end
+
+function Pipeline:filterN(predicate, n)
+    local table = Collects.filterN(self.iterable, predicate, n)
+    return Pipeline:new(table)
+end
+
+function Pipeline:map(mapper)
+    local table = Collects.map(self.iterable, mapper)
+    return Pipeline:new(table)
+end
+

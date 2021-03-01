@@ -75,6 +75,9 @@ function Collects.filterN(table, predicate, n)
     return newTable;
 end
 
+--- do map
+--- @param table table a table
+--- @param mapper function a mapper function
 function Collects.map(table, mapper)
     if (Types.isNull(table) or Types.isNull(mapper)) then
         return table or {}
