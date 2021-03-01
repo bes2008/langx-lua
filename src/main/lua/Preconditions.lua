@@ -4,7 +4,7 @@
 --- DateTime: 2021/2/26 15:06
 ---
 
-function checkArgument()
+function checkArgument(expression, message, messageArgs)
 
 end
 

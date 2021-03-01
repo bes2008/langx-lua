@@ -7,7 +7,7 @@ local Collects = require("collection.Collects")
 local Pipeline = { iterable = {} }
 
 --- create a pipeline with an iterable
---- @param iterable table
+--- @param iterable table|function
 --- @return table an Pipeline instance
 function Pipeline:new(iterable)
     iterable = iterable or {}
@@ -51,3 +51,4 @@ function Pipeline:map(mapper)
     return Pipeline:new(table)
 end
 
+return Pipeline

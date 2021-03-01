@@ -9,13 +9,19 @@ local Functions = require("Functions")
 local Collects = {}
 
 --- traverse a table
---- @param table table a table
+--- @overload fun(table:string|function, consumer:function):table
+---
+--- @param table table|function a table or a iterator function
 --- @param consumePredicate function a predicate with two arguments: key, value, when it match, will do do with the consumer
 --- @param consumer function a consumer with two arguments: key, value
 --- @param breakPredicate function a predicate with two arguments: key,value
 function Collects.forEach(table, consumePredicate, consumer, breakPredicate)
-    if (Types.isNull(table) or Types.isNull(consumer)) then
+    if (Types.isNull(table)) then
         return
+    end
+    if (Types.isNull(consumer) and Types.isNull(breakPredicate) and Types.isFunction(consumePredicate)) then
+        consumer = consumePredicate;
+        consumePredicate = nil;
     end
 
     if (Types.isNull(consumePredicate)) then
@@ -26,11 +32,30 @@ function Collects.forEach(table, consumePredicate, consumer, breakPredicate)
         breakPredicate = Functions.falsePredicate;
     end
 
-    for key, value in pairs(table) do
-        if (consumePredicate(key, value)) then
-            consumer(key, value)
-            if (breakPredicate(key, value)) then
-                break ;
+    if (Types.isFunction(table)) then
+        local generator = table
+        local index = 0
+
+        while (true) do
+            index = index + 1
+            local value = generator()
+            if (value == nil) then
+                break
+            end
+            if (consumePredicate(index, value)) then
+                consumer(index, value)
+                if (breakPredicate(index, value)) then
+                    break ;
+                end
+            end
+        end
+    else
+        for key, value in pairs(table) do
+            if (consumePredicate(key, value)) then
+                consumer(key, value)
+                if (breakPredicate(key, value)) then
+                    break ;
+                end
             end
         end
     end
@@ -88,6 +113,7 @@ function Collects.map(table, mapper)
     if (Types.isNull(table) or Types.isNull(mapper)) then
         return table or {}
     end
+
     local newTable = {}
     local consumer = function(key, value)
         local key1, value1 = mapper(key, value);
