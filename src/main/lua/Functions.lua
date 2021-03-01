@@ -14,4 +14,8 @@ function Functions.falsePredicate()
     return false
 end
 
+function Functions.noopFunction(any)
+    return any
+end
+
 return Functions;

@@ -28,15 +28,7 @@ end
 
 print(b, x)
 
-local StringTemplates = require("text.StringTemplates")
-
-a = "hello, {}, welcome use {}"
-local formatted = StringTemplates.formatWithPlaceholder(a, "user", "LUA")
-print(formatted)
-
-a = "hello, {1}, welcome use {2}"
-formatted = StringTemplates.formatWithIndex(a, "user", "LUA")
-print(formatted)
+print("========================================================")
 
 local testObj = {}
 
@@ -57,14 +49,30 @@ end
 function testObj.varargsTests3(arg0, ...)
     print("=============test 3===============")
 
-    local showAll = function(...)
+    local showAll = function(index, matched, ...)
         print(...)
     end
     local length = select("#", ...)
     print(length)
-    showAll(...)
+    showAll(0, "{}", ...)
 end
 
 testObj.varargsTests("1", 39, "hello, world")
 testObj.varargsTests2("1", 39, "hello, world")
 testObj.varargsTests3("1", 39, "hello, world")
+
+print("========================================================")
+
+local StringTemplates = require("text.StringTemplates")
+
+local a = "hello, {}, welcome use {}"
+local formatted = string.gsub(a, "\\{}", function(item)
+    print(item)
+end)
+print(formatted)
+formatted = StringTemplates.formatWithPlaceholder(a, "user", "LUA")
+print(formatted)
+
+local a = "hello, {1}, welcome use {2}"
+formatted = StringTemplates.formatWithIndex(a, "user", "LUA")
+print(formatted)

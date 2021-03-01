@@ -14,7 +14,7 @@ function StringTemplates.formatWithIndex(template, ...)
     st.template = template
     st.variablePattern = "\\{\\d+}"
 
-    st.variableGetter = function(index, variableName, ...)
+    st.variableGetter = function(variableName)
         print(variableName)
     end
 
@@ -24,7 +24,7 @@ end
 --- do format
 --- @param template string|function the string template
 --- @param variablePattern string|function
---- @param variableGetter function
+--- @param variableGetter function function(index, matched, ...)
 function StringTemplates.format(template, variablePattern, variableGetter, ...)
     local st = StringTemplate:new()
     if (Objs.isFunction(template)) then
@@ -39,10 +39,10 @@ function StringTemplates.format(template, variablePattern, variableGetter, ...)
     st.variablePattern = variablePattern
 
     local index = 0
-    local varargs = select(1)
+    local varArgs = select(1, ...)
     st.variableGetter = function(matched)
         index = index + 1
-        return variableGetter(index, matched, varargs)
+        return variableGetter(index, matched, varArgs)
     end
     return st:format()
 end
@@ -53,13 +53,14 @@ end
 --- @return string the formatted string
 function StringTemplates.formatWithPlaceholder(template, ...)
     local variableGetter = function(index, matched, ...)
-        local varargs = select(index)
-        if (not varargs == nil) then
-            return tostring(varargs[1])
+        local varArgs = select(index, ...)
+        if (varArgs == nil) then
+            return matched
         end
-        return ""
+        return tostring(varArgs[1])
+
     end
-    return StringTemplates.format(template, "\\{}", variableGetter, ...)
+    return StringTemplates.format(template, "{}", variableGetter, ...)
 end
 
 --- format with: {1}, {2}
@@ -72,7 +73,7 @@ function StringTemplates.formatWithIndex(template, ...)
         matched = string.gsub(matched, "}", "")
 
         local argsIndex = tonumber(matched, 10)
-        local varargs = select(argsIndex)
+        local varargs = select(argsIndex, ...)
         if (not varargs == nil) then
             return tostring(varargs[1])
         end
