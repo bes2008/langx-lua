@@ -24,7 +24,7 @@ end
 --- do format
 --- @param template string|function the string template
 --- @param variablePattern string|function
---- @param variableGetter function function(index, matched, ...)
+--- @param variableGetter function function(index:number, matched:string, varArgsTable:table)
 function StringTemplates.format(template, variablePattern, variableGetter, ...)
     local st = StringTemplate:new()
     if (Objs.isFunction(template)) then
@@ -39,7 +39,7 @@ function StringTemplates.format(template, variablePattern, variableGetter, ...)
     st.variablePattern = variablePattern
 
     local index = 0
-    local varArgs = select(1, ...)
+    local varArgs = { ... }
     st.variableGetter = function(matched)
         index = index + 1
         return variableGetter(index, matched, varArgs)
@@ -52,13 +52,12 @@ end
 --- @vararg any variable args
 --- @return string the formatted string
 function StringTemplates.formatWithPlaceholder(template, ...)
-    local variableGetter = function(index, matched, ...)
-        local varArgs = select(index, ...)
-        if (varArgs == nil) then
+    local variableGetter = function(index, matched, varArgsTable)
+        local arg = rawget(varArgsTable, index)
+        if (arg == nil) then
             return matched
         end
-        return tostring(varArgs[1])
-
+        return tostring(arg)
     end
     return StringTemplates.format(template, "{}", variableGetter, ...)
 end
@@ -68,18 +67,18 @@ end
 --- @vararg any
 --- @return string the formatted string
 function StringTemplates.formatWithIndex(template, ...)
-    local variableGetter = function(index, matched, ...)
-        matched = string.gsub(matched, "\\{", "")
+    local variableGetter = function(index, matched, varArgsTable)
+        matched = string.gsub(matched, "{", "")
         matched = string.gsub(matched, "}", "")
 
         local argsIndex = tonumber(matched, 10)
-        local varargs = select(argsIndex, ...)
-        if (not varargs == nil) then
-            return tostring(varargs[1])
+        local arg = rawget(varArgsTable, argsIndex)
+        if (arg == nil) then
+            return matched
         end
-        return ""
+        return tostring(arg)
     end
-    return StringTemplates.format(template, "\\{\\d+}", variableGetter, ...)
+    return StringTemplates.format(template, "{%d+}", variableGetter, ...)
 end
 
 return StringTemplates;

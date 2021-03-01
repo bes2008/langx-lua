@@ -7,7 +7,7 @@
 local StringTemplate = {
     template = "",
     variablePattern = "{}",
-    variableGetter = function()
+    variableGetter = function(matched)
         return nil
     end
 }

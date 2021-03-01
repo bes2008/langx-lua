@@ -65,14 +65,15 @@ print("========================================================")
 
 local StringTemplates = require("text.StringTemplates")
 
-local a = "hello, {}, welcome use {}"
+a = "hello, {}, welcome use {}"
 local formatted = string.gsub(a, "\\{}", function(item)
     print(item)
 end)
 print(formatted)
+
 formatted = StringTemplates.formatWithPlaceholder(a, "user", "LUA")
 print(formatted)
 
-local a = "hello, {1}, welcome use {2}"
+a = "hello, {1}, welcome use {2}"
 formatted = StringTemplates.formatWithIndex(a, "user", "LUA")
 print(formatted)
