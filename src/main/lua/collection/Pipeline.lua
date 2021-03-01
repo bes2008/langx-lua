@@ -11,7 +11,7 @@ local Pipeline = { iterable = {} }
 --- @return table an Pipeline instance
 function Pipeline:new(iterable)
     iterable = iterable or {}
-    instance = {}
+    local instance = {}
     setmetatable(instance, self)
     self.__index = self
     instance.iterable = iterable

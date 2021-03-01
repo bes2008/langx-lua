@@ -7,7 +7,7 @@ require("debugger")
 package.path = package.path .. ";D:/projects/workspace_langx_lua/langx_lua/src/main/lua/?.lua"
 
 local Pipeline = require("collection.Pipeline")
-local Types = require("Types")
+local Objs = require("Objs")
 
 local tb = { "a1", "a2", 3, "a4", 'a5' }
 
@@ -15,7 +15,7 @@ local pipeline = Pipeline:new(tb)
 
 pipeline:filter(
         function(index, value)
-            return Types.isString(value)
+            return Objs.isString(value)
         end
 )       :forEach(nil,
         function(index, value)

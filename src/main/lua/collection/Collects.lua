@@ -4,7 +4,7 @@
 --- DateTime: 2021/2/26 15:05
 ---
 
-local Types = require("Types")
+local Objs = require("Objs")
 local Functions = require("Functions")
 local Collects = {}
 
@@ -16,30 +16,30 @@ local Collects = {}
 --- @param consumer function a consumer with two arguments: key, value
 --- @param breakPredicate function a predicate with two arguments: key,value
 function Collects.forEach(table, consumePredicate, consumer, breakPredicate)
-    if (Types.isNull(table)) then
+    if (Objs.isNull(table)) then
         return
     end
-    if (Types.isNull(consumer) and Types.isNull(breakPredicate) and Types.isFunction(consumePredicate)) then
+    if (Objs.isNull(consumer) and Objs.isNull(breakPredicate) and Objs.isFunction(consumePredicate)) then
         consumer = consumePredicate;
         consumePredicate = nil;
     end
 
-    if (Types.isNull(consumePredicate)) then
+    if (Objs.isNull(consumePredicate)) then
         consumePredicate = Functions.truePredicate
     end
 
-    if (Types.isNull(breakPredicate)) then
+    if (Objs.isNull(breakPredicate)) then
         breakPredicate = Functions.falsePredicate;
     end
 
-    if (Types.isNull(consumer)) then
+    if (Objs.isNull(consumer)) then
         return
     end
-    if ((not Types.isFunction(consumePredicate)) or (not Types.isFunction(breakPredicate))) then
+    if ((not Objs.isFunction(consumePredicate)) or (not Objs.isFunction(breakPredicate))) then
         return
     end
 
-    if (Types.isFunction(table)) then
+    if (Objs.isFunction(table)) then
         local generator = table
         local index = 0
 
@@ -82,14 +82,14 @@ end
 --- @param n number an integer,  if n < 0, will not length limit, if n = 0 , will not do filter
 --- @return table an new table
 function Collects.filterN(table, predicate, n)
-    if (Types.isNull(table) or Types.isNull(predicate)) then
+    if (Objs.isNull(table) or Objs.isNull(predicate)) then
         return table or {}
     end
 
-    if (Types.isNull(n)) then
+    if (Objs.isNull(n)) then
         n = -1;
     end
-    if (not Types.isNumber(n)) then
+    if (not Objs.isNumber(n)) then
         n = -1;
     end
 
@@ -117,7 +117,7 @@ end
 --- @param mapper function a mapper function
 --- @return table an new table
 function Collects.map(table, mapper)
-    if (Types.isNull(table) or Types.isNull(mapper)) then
+    if (Objs.isNull(table) or Objs.isNull(mapper)) then
         return table or {}
     end
 
