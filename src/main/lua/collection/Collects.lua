@@ -23,9 +23,6 @@ function Collects.forEach(table, consumePredicate, consumer, breakPredicate)
         consumer = consumePredicate;
         consumePredicate = nil;
     end
-    if (Types.isNull(consumer)) then
-        return
-    end
 
     if (Types.isNull(consumePredicate)) then
         consumePredicate = Functions.truePredicate
@@ -33,6 +30,13 @@ function Collects.forEach(table, consumePredicate, consumer, breakPredicate)
 
     if (Types.isNull(breakPredicate)) then
         breakPredicate = Functions.falsePredicate;
+    end
+
+    if (Types.isNull(consumer)) then
+        return
+    end
+    if ((not Types.isFunction(consumePredicate)) or (not Types.isFunction(breakPredicate))) then
+        return
     end
 
     if (Types.isFunction(table)) then
