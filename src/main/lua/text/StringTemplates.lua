@@ -12,7 +12,7 @@ local StringTemplates = {}
 function StringTemplates.formatWithIndex(template, ...)
     local st = StringTemplate:new()
     st.template = template
-    st.variablePattern = "\\{\\d+}"
+    st.variablePattern = "{%d+}"
 
     st.variableGetter = function(variableName)
         print(variableName)
