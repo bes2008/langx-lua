@@ -36,6 +36,10 @@ function Collects.forEach(table, consumePredicate, consumer, breakPredicate)
     end
 end
 
+--- filter a table
+--- @param table table the table
+--- @param predicate function a predicate function
+--- @return table an new table
 function Collects.filter(table, predicate)
     return Collects.filterN(table, predicate, -1);
 end
@@ -44,6 +48,7 @@ end
 --- @param table table a table
 --- @param predicate function the predicate
 --- @param n number an integer,  if n < 0, will not length limit, if n = 0 , will not do filter
+--- @return table an new table
 function Collects.filterN(table, predicate, n)
     if (Types.isNull(table) or Types.isNull(predicate)) then
         return table or {}
@@ -78,6 +83,7 @@ end
 --- do map
 --- @param table table a table
 --- @param mapper function a mapper function
+--- @return table an new table
 function Collects.map(table, mapper)
     if (Types.isNull(table) or Types.isNull(mapper)) then
         return table or {}

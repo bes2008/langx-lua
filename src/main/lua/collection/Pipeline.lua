@@ -8,7 +8,7 @@ local Pipeline = { iterable = {} }
 
 --- create a pipeline with an iterable
 --- @param iterable table
---- @return  table
+--- @return table an Pipeline instance
 function Pipeline:new(iterable)
     iterable = iterable or {}
     instance = {}
@@ -27,16 +27,25 @@ function Pipeline:forEach(consumePredicate, consumer, breakPredicate)
 end
 
 --- do filter
+--- @param predicate function a function
+--- @return table an new table
 function Pipeline:filter(predicate)
     local table = Collects.filter(self.iterable, predicate)
     return Pipeline:new(table);
 end
 
+--- do filter
+--- @param predicate function a function
+--- @param n number an integer
+--- @return table an new table
 function Pipeline:filterN(predicate, n)
     local table = Collects.filterN(self.iterable, predicate, n)
     return Pipeline:new(table)
 end
 
+--- map a pipeline
+--- @param mapper function a mapper function
+--- @return table an new table
 function Pipeline:map(mapper)
     local table = Collects.map(self.iterable, mapper)
     return Pipeline:new(table)
