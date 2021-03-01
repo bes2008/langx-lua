@@ -4,8 +4,8 @@
 --- DateTime: 2021/2/26 15:05
 ---
 
-local Types = require("com.jn.langx.lua.utils.Types")
-local Functions = require("com.jn.langx.lua.utils.Functions")
+local Types = require("Types")
+local Functions = require("Functions")
 local Collects = {}
 
 --- traverse a table

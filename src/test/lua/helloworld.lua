@@ -6,7 +6,7 @@
 ---
 ---
 
-require("utils.debugger")
+require("debugger")
 
 print("hello world")
 

@@ -9,7 +9,7 @@
 print(package.path)
 package.path = package.path .. ";D:/projects/workspace_langx_lua/langx_lua/src/main/lua/?.lua"
 
-require("utils.debugger")
+require("debugger")
 
 print(package.path)
 
@@ -18,7 +18,7 @@ print(_VERSION)
 local globalEnvVariables = _G
 print(_G)
 
-local Collects = require("com.jn.langx.lua.utils.collection.Collects")
+local Collects = require("collection.Collects")
 Collects.forEach(_G, nil, function(key, value)
         print(key, value)
     end
