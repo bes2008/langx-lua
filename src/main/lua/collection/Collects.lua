@@ -23,6 +23,9 @@ function Collects.forEach(table, consumePredicate, consumer, breakPredicate)
         consumer = consumePredicate;
         consumePredicate = nil;
     end
+    if (Types.isNull(consumer)) then
+        return
+    end
 
     if (Types.isNull(consumePredicate)) then
         consumePredicate = Functions.truePredicate
