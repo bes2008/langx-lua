@@ -15,7 +15,8 @@ local Collects = {}
 --- @param consumePredicate function a predicate with two arguments: key, value, when it match, will do do with the consumer
 --- @param consumer function a consumer with two arguments: key, value
 --- @param breakPredicate function a predicate with two arguments: key,value
-function Collects.forEach(table, consumePredicate, consumer, breakPredicate)
+--- @param traverseUsingIndex boolean traverse using index (ipairs), default true
+function Collects.forEach(table, consumePredicate, consumer, breakPredicate, traverseUsingIndex)
     if (Objs.isNull(table)) then
         return
     end
@@ -57,11 +58,22 @@ function Collects.forEach(table, consumePredicate, consumer, breakPredicate)
             end
         end
     else
-        for key, value in pairs(table) do
-            if (consumePredicate(key, value)) then
-                consumer(key, value)
-                if (breakPredicate(key, value)) then
-                    break ;
+        if (not traverseUsingIndex) then
+            for key, value in pairs(table) do
+                if (consumePredicate(key, value)) then
+                    consumer(key, value)
+                    if (breakPredicate(key, value)) then
+                        break ;
+                    end
+                end
+            end
+        else
+            for key, value in ipairs(table) do
+                if (consumePredicate(key, value)) then
+                    consumer(key, value)
+                    if (breakPredicate(key, value)) then
+                        break ;
+                    end
                 end
             end
         end
@@ -129,5 +141,8 @@ function Collects.map(table, mapper)
     Collects.forEach(table, Functions.truePredicate, consumer)
     return newTable
 end
+
+
+
 
 return Collects;

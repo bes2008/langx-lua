@@ -9,21 +9,32 @@ package.path = package.path .. ";D:/projects/workspace_langx_lua/langx_lua/src/m
 local Pipeline = require("collection.Pipeline")
 local Objs = require("Objs")
 
-local tb = { "a1", "a2", 3, "a4", 'a5' }
+function showTable(tb)
+    local pipeline = Pipeline:new(tb)
 
-local pipeline = Pipeline:new(tb)
+    pipeline:filter(
+            function(index, value)
+                return Objs.isString(value)
+            end
+    )       :forEach(
+            function(index, value)
+                print(index, value)
+            end
+    )
+end
 
-pipeline:filter(
-        function(index, value)
-            return Objs.isString(value)
-        end
-)       :forEach(nil,
-        function(index, value)
-            print(index, value)
-        end
-)
-
-
+print("===========test 1=============")
+local tb1 = { "a1", "a2", 3, "a4", 'a5' }
+showTable(tb1)
+print("===========test 2=============")
+local tb2 = {
+    key1 = "value1",
+    key2 = "value2",
+    key3 = "value3",
+    key4 = "value4",
+    key5 = "value5"
+}
+showTable(tb2)
 
 
 
